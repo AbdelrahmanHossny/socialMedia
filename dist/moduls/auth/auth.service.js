@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const user_model_1 = require("../../DB/models/user.model");
+const user_repository_1 = require("../../DB/repository/user.repository");
 const sendEmail = async ({ from = process.env.App_Email, to = "", subject = "sara7a", text = "", html = "", attachments = [], } = {}) => {
     const transporter = nodemailer_1.default.createTransport({
         service: "gmail",
@@ -25,17 +27,15 @@ const sendEmail = async ({ from = process.env.App_Email, to = "", subject = "sar
 };
 exports.sendEmail = sendEmail;
 class AuthentcationService {
+    userModel = new user_repository_1.UserRepository(user_model_1.UserModel);
     constructor() { }
     signup = async (req, res) => {
         const { username, email, password } = req.body;
-        (0, exports.sendEmail)({
-            to: email,
-            html: `email confarmid`,
-            subject: "confirm Email",
-            text: "Email confarmid you can login now "
+        const user = await this.userModel.createUser({
+            data: [{ username, email, password }]
         });
         console.log({ username, email, password });
-        return res.status(201).json({ message: "Done", data: req.body });
+        return res.status(201).json({ message: "Done", data: { user } });
     };
     login = (req, res) => {
         return res.status(200).json({ message: "Done", data: req.body });

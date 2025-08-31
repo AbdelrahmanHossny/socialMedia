@@ -14,7 +14,7 @@ export interface Iuser {
 
   fristName: string;
   lastName: string;
-  userName?: string;
+  username?: string;
 
   email: string;
   confirmEmailOtp?: string;
@@ -60,7 +60,6 @@ const userSchema = new Schema<Iuser>(
     otp: { type: String },
     otpExpires: { type: Date },
     isVerified: { type: Boolean, default: false },
-
   },
   {
     timestamps: true,
@@ -70,18 +69,13 @@ const userSchema = new Schema<Iuser>(
 );
 
 userSchema
-  .virtual("userName")
+  .virtual("username")
   .set(function (value: string) {
     const [fristName, lastName] = value.split(" ") || [];
-    this.set({ fristName, lastName });
+    this.set({ fristName, lastName});
   })
   .get(function () {
-    return this.fristName + "" + this.lastName;
+    return this.fristName + " "+ this.lastName;
   });
 
 export const UserModel = models.user || model<Iuser>("User", userSchema);
-
-
-
-
-

@@ -34,12 +34,12 @@ const userSchema = new mongoose_1.Schema({
     toObject: { virtuals: true },
 });
 userSchema
-    .virtual("userName")
+    .virtual("username")
     .set(function (value) {
     const [fristName, lastName] = value.split(" ") || [];
     this.set({ fristName, lastName });
 })
     .get(function () {
-    return this.fristName + "" + this.lastName;
+    return this.fristName + " " + this.lastName;
 });
 exports.UserModel = mongoose_1.models.user || (0, mongoose_1.model)("User", userSchema);
