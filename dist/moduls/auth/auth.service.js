@@ -7,6 +7,7 @@ exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const user_model_1 = require("../../DB/models/user.model");
 const user_repository_1 = require("../../DB/repository/user.repository");
+const error_response_1 = require("../utils/response/error.response");
 const sendEmail = async ({ from = process.env.App_Email, to = "", subject = "sara7a", text = "", html = "", attachments = [], } = {}) => {
     const transporter = nodemailer_1.default.createTransport({
         service: "gmail",
@@ -31,10 +32,15 @@ class AuthentcationService {
     constructor() { }
     signup = async (req, res) => {
         const { username, email, password } = req.body;
-        const user = await this.userModel.createUser({
-            data: [{ username, email, password }]
+        const userExist = await this.userModel.findOne({
+            filter: { email }
         });
-        console.log({ username, email, password });
+        if (userExist) {
+            throw new error_response_1.conflectException("Email already Exist");
+        }
+        const user = await this.userModel.createUser({
+            data: [{ username, email, password }],
+        });
         return res.status(201).json({ message: "Done", data: { user } });
     };
     login = (req, res) => {

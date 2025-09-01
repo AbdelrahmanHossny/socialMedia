@@ -27,6 +27,11 @@ export class NotFoundException extends ApplicationExeption {
     super(message, 404, cause);
   }
 }
+export class conflectException extends ApplicationExeption {
+  constructor(message: string, cause?: unknown) {
+    super(message, 409, cause);
+  }
+}
 
 export const GlobalErrorHandling = (
   error: Ierror,

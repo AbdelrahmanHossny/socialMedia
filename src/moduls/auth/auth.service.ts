@@ -3,6 +3,7 @@ import { IsignUpBodyInputsDto } from "./auth.dto";
 import nodemailer from "nodemailer";
 import { UserModel } from "../../DB/models/user.model";
 import { UserRepository } from "../../DB/repository/user.repository";
+import { conflectException } from "../utils/response/error.response";
 
 export const sendEmail = async ({
   from = process.env.App_Email,
@@ -35,14 +36,22 @@ export const sendEmail = async ({
 
 class AuthentcationService {
   private userModel = new UserRepository(UserModel);
+
   constructor() {}
 
   signup = async (req: Request, res: Response): Promise<Response> => {
     const { username, email, password }: IsignUpBodyInputsDto = req.body;
 
-  const user =await this.userModel.createUser({
-    data:[{username , email ,password}]
-  })
+    const userExist = await this.userModel.findOne({
+      filter:{email}
+    })
+    if (userExist) {
+      throw new conflectException("Email already Exist")
+    }
+
+    const user = await this.userModel.createUser({
+      data: [{ username, email, password }],
+    });
 
     // sendEmail({
     //   to:email,
@@ -51,7 +60,7 @@ class AuthentcationService {
     //   text:"Email confarmid you can login now "
     // })
 
-    console.log({ username, email, password });
+    // console.log({ username, email, password });
 
     return res.status(201).json({ message: "Done", data: { user } });
   };
