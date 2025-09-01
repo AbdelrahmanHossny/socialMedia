@@ -14,7 +14,7 @@ import { rateLimit } from "express-rate-limit";
 
 // import module_Routing
 import authController from "./moduls/auth/auth.controller";
-import { GlobalErrorHandling } from "./moduls/utils/response/error.response";
+import { GlobalErrorHandling } from "./utils/response/error.response";
 import connectDB from "./DB/connection.db";
 
 // Handel base rate limit on all api requests

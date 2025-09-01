@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import type { ZodError, ZodType } from "zod";
-import { BadrequestException } from "../moduls/utils/response/error.response";
+import { BadrequestException } from "../utils/response/error.response";
 
 type keyReqType = keyof Request;
 type SchemaType = Partial<Record<keyReqType, ZodType>>;

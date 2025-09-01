@@ -3,8 +3,8 @@ import { IsignUpBodyInputsDto } from "./auth.dto";
 import nodemailer from "nodemailer";
 import { UserModel } from "../../DB/models/user.model";
 import { UserRepository } from "../../DB/repository/user.repository";
-import { conflectException } from "../utils/response/error.response";
-import { genrateHash } from "../utils/security/hash.security";
+import { conflectException } from "../../utils/response/error.response";
+import { genrateHash } from "../../utils/security/hash.security";
 
 export const sendEmail = async ({
   from = process.env.App_Email,
