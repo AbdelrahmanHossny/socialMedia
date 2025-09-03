@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 const dataBase_repository_1 = require("./dataBase.repository");
-const error_response_1 = require("../../moduls/utils/response/error.response");
+const error_response_1 = require("../../utils/response/error.response");
 class UserRepository extends dataBase_repository_1.DataBaseRepository {
     model;
     constructor(model) {

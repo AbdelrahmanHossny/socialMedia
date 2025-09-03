@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validation = void 0;
-const error_response_1 = require("../moduls/utils/response/error.response");
+const error_response_1 = require("../utils/response/error.response");
 const validation = (Schema) => {
     return (req, res, next) => {
         console.log(Schema);
