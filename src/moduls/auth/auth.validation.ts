@@ -1,4 +1,4 @@
-import { email, z } from "zod";
+import { z } from "zod";
 import { genralFields } from "../../middleware/validation.middleware";
 
 export const login = {
