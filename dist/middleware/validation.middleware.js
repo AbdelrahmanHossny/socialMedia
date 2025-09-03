@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validation = void 0;
+exports.genralFields = exports.validation = void 0;
 const error_response_1 = require("../utils/response/error.response");
+const zod_1 = require("zod");
 const validation = (Schema) => {
     return (req, res, next) => {
         console.log(Schema);
@@ -30,3 +31,13 @@ const validation = (Schema) => {
     };
 };
 exports.validation = validation;
+exports.genralFields = {
+    username: zod_1.z.string().min(2).max(20),
+    email: zod_1.z.email(),
+    password: zod_1.z
+        .string()
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])(?!.*\s).{8,64}$/, {
+        error: "Password must be 8-64 chars, include upper, lower, digit, special, and no spaces.",
+    }),
+    confirmPassword: zod_1.z.string(),
+};

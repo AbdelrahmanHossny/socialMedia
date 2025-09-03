@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import type { ZodError, ZodType } from "zod";
 import { BadrequestException } from "../utils/response/error.response";
+import { z } from "zod";
 
 type keyReqType = keyof Request;
 type SchemaType = Partial<Record<keyReqType, ZodType>>;
@@ -39,4 +40,16 @@ export const validation = (Schema: SchemaType) => {
 
     return next() as unknown as NextFunction;
   };
+};
+
+export const genralFields = {
+  username: z.string().min(2).max(20),
+  email: z.email(),
+  password: z
+    .string()
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])(?!.*\s).{8,64}$/, {
+      error:
+        "Password must be 8-64 chars, include upper, lower, digit, special, and no spaces.",
+    }),
+  confirmPassword: z.string(),
 };
