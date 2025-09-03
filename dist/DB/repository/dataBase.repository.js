@@ -19,5 +19,8 @@ class DataBaseRepository {
     async create({ data, options, }) {
         return await this.model.create(data, options);
     }
+    async updateOne({ filter, update, options, }) {
+        return await this.model.updateOne(filter, update, options);
+    }
 }
 exports.DataBaseRepository = DataBaseRepository;

@@ -52,4 +52,5 @@ export const genralFields = {
         "Password must be 8-64 chars, include upper, lower, digit, special, and no spaces.",
     }),
   confirmPassword: z.string(),
+  otp: z.string().regex(/^\d{6}$/),
 };

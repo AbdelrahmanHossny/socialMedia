@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { email, z } from "zod";
 import { genralFields } from "../../middleware/validation.middleware";
 
 export const login = {
@@ -13,4 +13,10 @@ export const signup = {
     username: genralFields.username,
     confirmPassword: genralFields.confirmPassword,
   }),
+};
+export const confirmEmail = {
+  body:z.strictObject({
+    email:genralFields.email,
+    otp:genralFields.otp
+  })
 };

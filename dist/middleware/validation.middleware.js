@@ -40,4 +40,5 @@ exports.genralFields = {
         error: "Password must be 8-64 chars, include upper, lower, digit, special, and no spaces.",
     }),
     confirmPassword: zod_1.z.string(),
+    otp: zod_1.z.string().regex(/^\d{6}$/),
 };

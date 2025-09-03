@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
-import { IsignUpBodyInputsDto } from "./auth.dto";
+import { IconfirmEmailBodyInputsDto, IsignUpBodyInputsDto } from "./auth.dto";
 import { UserModel } from "../../DB/models/user.model";
 import { UserRepository } from "../../DB/repository/user.repository";
-import { conflectException } from "../../utils/response/error.response";
-import { genrateHash } from "../../utils/security/hash.security";
+import {
+  conflectException,
+  NotFoundException,
+} from "../../utils/response/error.response";
+import { compareHash, genrateHash } from "../../utils/security/hash.security";
 import { emailEvent } from "../../utils/events/email.event";
 import { generateNumberOtp } from "../../utils/security/otp";
 
@@ -44,8 +47,30 @@ class AuthentcationService {
     return res.status(200).json({ message: "Done", data: req.body });
   };
 
-  confirmEmail = (req: Request, res: Response): Response => {
-    return res.status(200).json({ message: "Email confimed", data: req.body });
+  confirmEmail = async (req: Request, res: Response): Promise<Response> => {
+    const { email, otp }: IconfirmEmailBodyInputsDto = req.body;
+    const user = await this.userModel.findOne({
+      filter: {
+        email,
+        confirmEmailOtp: { $exists: true },
+        confirmedAt: { $exists: false },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException("In-valid Account or Already confirmed");
+    }
+
+    if (!(await compareHash(otp, user.confirmEmailOtp as string))) {
+      throw new conflectException("In-valid confirmation code");
+    }
+
+    await this.userModel.updateOne({
+      filter: { email },
+      update: { confirmedAt: new Date(), $unset: { confirmEmailOtp: 1 } },
+    });
+
+    return res.status(200).json({ message: "Email confirmed" });
   };
 }
 

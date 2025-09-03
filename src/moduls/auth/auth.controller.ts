@@ -6,6 +6,6 @@ const router =Router()
 
 router.post("/signup" ,validation(validators.signup), AuthentcationService.signup)
 router.post("/login" ,AuthentcationService.login)
-router.post("/confirmEmail" ,AuthentcationService.confirmEmail)
+router.patch("/confirmEmail",validation(validators.confirmEmail) ,AuthentcationService.confirmEmail)
 
 export default router

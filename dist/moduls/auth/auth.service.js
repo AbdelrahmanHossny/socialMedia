@@ -34,8 +34,26 @@ class AuthentcationService {
     login = (req, res) => {
         return res.status(200).json({ message: "Done", data: req.body });
     };
-    confirmEmail = (req, res) => {
-        return res.status(200).json({ message: "Email confimed", data: req.body });
+    confirmEmail = async (req, res) => {
+        const { email, otp } = req.body;
+        const user = await this.userModel.findOne({
+            filter: {
+                email,
+                confirmEmailOtp: { $exists: true },
+                confirmedAt: { $exists: false },
+            },
+        });
+        if (!user) {
+            throw new error_response_1.NotFoundException("In-valid Account or Already confirmed");
+        }
+        if (!(await (0, hash_security_1.compareHash)(otp, user.confirmEmailOtp))) {
+            throw new error_response_1.conflectException("In-valid confirmation code");
+        }
+        await this.userModel.updateOne({
+            filter: { email },
+            update: { confirmedAt: new Date(), $unset: { confirmEmailOtp: 1 } },
+        });
+        return res.status(200).json({ message: "Email confirmed" });
     };
 }
 exports.default = new AuthentcationService();
